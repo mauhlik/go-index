@@ -6,12 +6,12 @@ on:
     pull_request: null
 
 permissions:
-    contents: write
-    actions: write
+    contents: read
     
 jobs:
     fix-lint-issues:
         permissions:
+          actions: write
           contents: write
           statuses: write
         runs-on: ubuntu-24.04
