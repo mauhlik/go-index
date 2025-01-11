@@ -1,10 +1,14 @@
-package providers
+package providers_test
 
 import (
 	"testing"
+
+	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
 )
 
 func TestExtractVersionFromFilename(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		filename     string
 		artifactName string
@@ -23,17 +27,22 @@ func TestExtractVersionFromFilename(t *testing.T) {
 		{"app", "app", ""},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.filename, func(t *testing.T) {
-			got := ExtractVersionFromFilename(tt.filename, tt.artifactName)
-			if got != tt.expected {
-				t.Errorf("ExtractVersionFromFilename(%q, %q) = %v; want %v", tt.filename, tt.artifactName, got, tt.expected)
+	for _, testCase := range tests {
+		t.Run(testCase.filename, func(t *testing.T) {
+			t.Parallel()
+
+			got := providers.ExtractVersionFromFilename(testCase.filename, testCase.artifactName)
+			if got != testCase.expected {
+				t.Errorf("ExtractVersionFromFilename(%q, %q) = %v; want %v",
+					testCase.filename, testCase.artifactName, got, testCase.expected)
 			}
 		})
 	}
 }
 
 func TestContainsNumbers(t *testing.T) {
+	t.Parallel()
+
 	tests := []struct {
 		input    string
 		expected bool
@@ -46,11 +55,14 @@ func TestContainsNumbers(t *testing.T) {
 		{"abc", false},
 	}
 
-	for _, tt := range tests {
-		t.Run(tt.input, func(t *testing.T) {
-			got := containsNumbers(tt.input)
-			if got != tt.expected {
-				t.Errorf("containsNumbers(%q) = %v; want %v", tt.input, got, tt.expected)
+	for _, testCase := range tests {
+		t.Run(testCase.input, func(t *testing.T) {
+			t.Parallel()
+
+			got := providers.ContainsNumbers(testCase.input)
+
+			if got != testCase.expected {
+				t.Errorf("ContainsNumbers(%q) = %v; want %v", testCase.input, got, testCase.expected)
 			}
 		})
 	}

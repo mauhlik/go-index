@@ -13,10 +13,12 @@ import (
 
 func main() {
 	configFile := "config.yml"
+
 	if len(os.Args) > 1 {
 		configFile = os.Args[1]
 	}
 	cfg, err := config.LoadConfig(configFile)
+
 	if err != nil {
 		log.Fatalf("Failed to load config: %v", err)
 	}
@@ -34,7 +36,9 @@ func main() {
 		case config.LocalProviderConfig:
 			provider = providers.NewLocalProvider(config.Path)
 		case config.S3ProviderConfig:
-			provider, err = providers.NewS3Provider(config.Bucket, config.Endpoint, config.AccessKey, config.SecretKey, config.Region, app.Logger())
+			provider, err = providers.NewS3Provider(
+				config.Bucket, config.Endpoint, config.AccessKey, config.SecretKey, config.Region, app.Logger(),
+			)
 			if err != nil {
 				log.Fatalf("Failed to initialize S3 provider for repository %s: %v", repo.Name, err)
 			}

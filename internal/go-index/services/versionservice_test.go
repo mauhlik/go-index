@@ -1,27 +1,21 @@
-package services
+package services_test
 
 import (
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
+	"github.com/MaUhlik-cen56998/go-index/internal/go-index/mocks"
+	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/golang/mock/gomock"
 )
 
-type MockProvider struct {
-	providers.Provider
-	mock *gomock.Controller
-}
-
-func (m *MockProvider) GetVersions(moduleName, artifactName string) ([]string, error) {
-	return []string{"0.0.0", "0.0.1", "1.0.0", "2.0.0"}, nil
-}
-
 func TestVersionServiceGetVersions(t *testing.T) {
+	t.Parallel()
+
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	mockProvider := &MockProvider{mock: mockCtrl}
-	service := NewService(mockProvider)
+	mockProvider := mocks.NewMockProvider(mockCtrl)
+	service := services.NewService(mockProvider)
 
 	moduleName := "fe"
 	artifactName := "app1"
@@ -35,6 +29,7 @@ func TestVersionServiceGetVersions(t *testing.T) {
 	if len(gotVersions) != len(expectedVersions) {
 		t.Errorf("GetVersions returned %d versions; want %d", len(gotVersions), len(expectedVersions))
 	}
+
 	for i, version := range gotVersions {
 		if version != expectedVersions[i] {
 			t.Errorf("GetVersions returned version %q; want %q", version, expectedVersions[i])
@@ -43,11 +38,13 @@ func TestVersionServiceGetVersions(t *testing.T) {
 }
 
 func TestVersionServiceGetLatestVersion(t *testing.T) {
+	t.Parallel()
+
 	mockCtrl := gomock.NewController(t)
 	defer mockCtrl.Finish()
 
-	mockProvider := &MockProvider{mock: mockCtrl}
-	service := NewService(mockProvider)
+	mockProvider := mocks.NewMockProvider(mockCtrl)
+	service := services.NewService(mockProvider)
 
 	moduleName := "fe"
 	artifactName := "app1"

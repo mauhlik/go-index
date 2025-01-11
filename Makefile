@@ -61,6 +61,9 @@ dep:
 lint:
 	golangci-lint run --enable-all
 
+fmt:
+	go fmt ./...
+
 clean:
 	go clean
 	rm -f ${BIN_DIR}/${BINARY_NAME}-darwin-arm64
