@@ -1,0 +1,45 @@
+name: Release
+
+on:
+  release:
+    types:
+      - created
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-24.04
+    env:
+      COMPONENT_NAME: go-index
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.CONTAINER_REGISTRY_USERNAME }}
+          password: ${{ secrets.CONTAINER_REGISTRY_PASSWORD }}
+
+      - name: Set version
+        id: version
+        run: |
+          if [ "${EVENT_NAME}" == "release" ]; then
+            echo "version=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+          else
+            GIT_HASH="$(git rev-parse --short HEAD)"
+            echo "version=0.0.0-${GIT_HASH}" >> "$GITHUB_OUTPUT"
+          fi
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          RELEASE_TAG: ${{ github.event.release.tag_name }}
+
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ vars.CONTAINER_REGISTRY_USERNAME }}/${{ env.COMPONENT_NAME }}:${{ steps.version.outputs.version }}

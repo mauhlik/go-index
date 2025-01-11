@@ -1,1 +1,1 @@
-# go-index
+# GO-INDEX
