@@ -6,7 +6,8 @@ on:
     pull_request: null
 
 permissions:
-    contents: read
+    contents: write
+    actions: write
     
 jobs:
     fix-lint-issues:
