@@ -28,10 +28,10 @@ jobs:
         id: version
         run: |
           if [ "${EVENT_NAME}" == "release" ]; then
-            echo "version=${RELEASE_TAG}" >> $GITHUB_OUTPUT
+            echo "version=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
           else
             GIT_HASH="$(git rev-parse --short HEAD)"
-            echo "version=0.0.0-${GIT_HASH}" >> $GITHUB_OUTPUT
+            echo "version=0.0.0-${GIT_HASH}" >> "$GITHUB_OUTPUT"
           fi
         env:
           EVENT_NAME: ${{ github.event_name }}
