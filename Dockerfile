@@ -16,7 +16,7 @@ RUN useradd -m app-user
 
 USER app-user
 
-WORKDIR /
+WORKDIR /usr/local/bin/
 
 COPY --from=build /usr/local/bin/app /usr/local/bin/app
 
