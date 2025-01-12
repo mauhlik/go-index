@@ -1,0 +1,24 @@
+linters:
+  disable:
+    - gofumpt
+    - tagalign
+linters-settings:
+  depguard:
+    rules:
+      main:
+        list-mode: lax
+        files:
+          - "!**/*.go"
+        allow:
+          - $gostd
+          - github.com/MaUhlik-cen56998/go-index
+run:
+  tests: true
+  exclude-dirs:
+    - bin
+    - .github
+    - .vscode
+  dirs:
+    - cmd
+    - config
+    - internal
