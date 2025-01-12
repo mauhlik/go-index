@@ -8,6 +8,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/config"
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/aws/aws-sdk-go/aws"
 	"gofr.dev/pkg/gofr/logging"
 )
 
@@ -42,11 +43,21 @@ func NewS3Provider(bucket, endpoint, accessKey, secretKey, region string, logger
 func (p *S3Provider) GetVersions(moduleName, artifactName string) ([]string, error) {
 	prefix := fmt.Sprintf("%s/%s/", moduleName, artifactName)
 	input := &s3.ListObjectsV2Input{
-		Bucket: &p.Bucket,
-		Prefix: &prefix,
+		Bucket:                   &p.Bucket,
+		Prefix:                   &prefix,
+		ContinuationToken:        nil,
+		Delimiter:                nil,
+		EncodingType:             "",
+		ExpectedBucketOwner:      nil,
+		FetchOwner:               aws.Bool(false),
+		MaxKeys:                  aws.Int32(0),
+		OptionalObjectAttributes: nil,
+		RequestPayer:             "",
+		StartAfter:               aws.String(""),
 	}
 
 	var versions []string
+
 	paginator := s3.NewListObjectsV2Paginator(p.Client, input)
 
 	for paginator.HasMorePages() {

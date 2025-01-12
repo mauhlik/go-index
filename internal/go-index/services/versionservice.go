@@ -41,12 +41,13 @@ func (s *versionService) GetLatestVersion(moduleName, artifactName string) (stri
 
 	semVersions := make([]semver.Version, len(versions))
 
-	for i, version := range versions {
+	for index, version := range versions {
 		semVersion, err := semver.Parse(version)
 		if err != nil {
 			return "", fmt.Errorf("failed to parse version: %w", err)
 		}
-		semVersions[i] = semVersion
+
+		semVersions[index] = semVersion
 	}
 
 	semver.Sort(semVersions)

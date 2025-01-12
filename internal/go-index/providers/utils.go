@@ -18,6 +18,7 @@ func ExtractVersionFromFilename(filename, artifactName string) string {
 			if ContainsNumbers(ext) {
 				break
 			}
+
 			version = strings.TrimSuffix(version, ext)
 		}
 

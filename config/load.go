@@ -19,40 +19,57 @@ var (
 
 func LoadConfig(filename string) (*Config, error) {
 	file, err := os.Open(filename)
+
 	if err != nil {
 		return nil, fmt.Errorf("failed to open config file: %w", err)
 	}
+
 	defer file.Close()
 
 	var config Config
 
 	ext := filepath.Ext(filename)
 
+	if err := decodeConfig(file, ext, &config); err != nil {
+		return nil, err
+	}
+
+	if err := parseProviderConfigs(&config, ext); err != nil {
+		return nil, err
+	}
+
+	return &config, nil
+}
+
+func decodeConfig(file *os.File, ext string, config *Config) error {
 	switch ext {
 	case ".json":
 		decoder := json.NewDecoder(file)
-		err = decoder.Decode(&config)
+		if err := decoder.Decode(config); err != nil {
+			return fmt.Errorf("failed to decode JSON config file: %w", err)
+		}
 	case ".yaml", ".yml":
 		decoder := yaml.NewDecoder(file)
-		err = decoder.Decode(&config)
+		if err := decoder.Decode(config); err != nil {
+			return fmt.Errorf("failed to decode YAML config file: %w", err)
+		}
 	default:
-		return nil, fmt.Errorf("%w: %s", ErrUnsupportedFileExtension, ext)
+		return fmt.Errorf("%w: %s", ErrUnsupportedFileExtension, ext)
 	}
 
-	if err != nil {
-		return nil, fmt.Errorf("failed to decode config file: %w", err)
-	}
+	return nil
+}
 
-	// Parse provider configurations
+func parseProviderConfigs(config *Config, ext string) error {
 	for key, value := range config.Providers {
-		providerMap, isMap := value.(map[interface{}]interface{})
-		if !isMap {
-			return nil, fmt.Errorf("%w: %s", ErrInvalidProviderFormat, key)
+		providerMap, err := value.(map[interface{}]interface{})
+		if !err {
+			return fmt.Errorf("%w: %s", ErrInvalidProviderFormat, key)
 		}
 
-		providerType, isString := providerMap["type"].(string)
-		if !isString {
-			return nil, fmt.Errorf("%w: %s", ErrProviderTypeRequired, key)
+		providerType, err := providerMap["type"].(string)
+		if !err {
+			return fmt.Errorf("%w: %s", ErrProviderTypeRequired, key)
 		}
 
 		var providerConfig interface{}
@@ -60,30 +77,26 @@ func LoadConfig(filename string) (*Config, error) {
 		switch providerType {
 		case "local":
 			var localConfig LocalProviderConfig
-			err = mapToStruct(providerMap, &localConfig, ext)
-
-			if err != nil {
-				return nil, err
+			if err := mapToStruct(providerMap, &localConfig, ext); err != nil {
+				return err
 			}
 
 			providerConfig = localConfig
 		case "s3":
 			var s3Config S3ProviderConfig
-			err = mapToStruct(providerMap, &s3Config, ext)
-
-			if err != nil {
-				return nil, err
+			if err := mapToStruct(providerMap, &s3Config, ext); err != nil {
+				return err
 			}
 
 			providerConfig = s3Config
 		default:
-			return nil, fmt.Errorf("%w: %s", ErrUnsupportedProviderType, providerType)
+			return fmt.Errorf("%w: %s", ErrUnsupportedProviderType, providerType)
 		}
 
 		config.Providers[key] = providerConfig
 	}
 
-	return &config, nil
+	return nil
 }
 
 func mapToStruct(providerMap map[interface{}]interface{}, targetStruct interface{}, ext string) error {
@@ -98,6 +111,7 @@ func mapToStruct(providerMap map[interface{}]interface{}, targetStruct interface
 
 		for key, value := range providerMap {
 			strKey, ok := key.(string)
+
 			if !ok {
 				return fmt.Errorf("%w: %v", ErrInvalidProviderFormat, key)
 			}

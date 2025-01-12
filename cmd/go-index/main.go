@@ -17,6 +17,7 @@ func main() {
 	if len(os.Args) > 1 {
 		configFile = os.Args[1]
 	}
+
 	cfg, err := config.LoadConfig(configFile)
 
 	if err != nil {

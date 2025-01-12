@@ -28,6 +28,7 @@ func (p *LocalProvider) GetVersions(moduleName, artifactName string) ([]string, 
 		if entry.IsDir() {
 			continue
 		}
+
 		filename := entry.Name()
 		version := ExtractVersionFromFilename(filename, artifactName)
 
