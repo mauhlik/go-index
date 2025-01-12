@@ -29,9 +29,12 @@ jobs:
         run: |
           if [ "${EVENT_NAME}" == "release" ]; then
             echo "version=${RELEASE_TAG}" >> "$GITHUB_OUTPUT"
+            DOCKER_VERSION=${RELEASE_TAG#v}
+            echo "docker-version=${DOCKER_VERSION}" >> "$GITHUB_OUTPUT"
           else
             GIT_HASH="$(git rev-parse --short HEAD)"
             echo "version=0.0.0-${GIT_HASH}" >> "$GITHUB_OUTPUT"
+            echo "docker-version=0.0.0-${GIT_HASH}" >> "$GITHUB_OUTPUT"
           fi
         env:
           EVENT_NAME: ${{ github.event_name }}
