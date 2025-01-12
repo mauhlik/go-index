@@ -1,0 +1,6 @@
+{
+  "threshold": 5,
+  "min-lines": 5,
+  "min-tokens": 70,
+  "ignore": ["**/*_test.go"]
+}

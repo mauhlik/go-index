@@ -12,15 +12,15 @@ type VersionService interface {
 	GetLatestVersion(moduleName, artifactName string) (string, error)
 }
 
-type versionService struct {
+type VersionServiceImpl struct {
 	provider providers.Provider
 }
 
-func NewService(provider providers.Provider) VersionService {
-	return &versionService{provider: provider}
+func NewService(provider providers.Provider) *VersionServiceImpl {
+	return &VersionServiceImpl{provider: provider}
 }
 
-func (s *versionService) GetVersions(moduleName, artifactName string) ([]string, error) {
+func (s *VersionServiceImpl) GetVersions(moduleName, artifactName string) ([]string, error) {
 	versions, err := s.provider.GetVersions(moduleName, artifactName)
 	if err != nil {
 		return nil, fmt.Errorf("failed to get versions from provider: %w", err)
@@ -29,7 +29,7 @@ func (s *versionService) GetVersions(moduleName, artifactName string) ([]string,
 	return versions, nil
 }
 
-func (s *versionService) GetLatestVersion(moduleName, artifactName string) (string, error) {
+func (s *VersionServiceImpl) GetLatestVersion(moduleName, artifactName string) (string, error) {
 	versions, err := s.provider.GetVersions(moduleName, artifactName)
 	if err != nil {
 		return "", fmt.Errorf("failed to get versions: %w", err)

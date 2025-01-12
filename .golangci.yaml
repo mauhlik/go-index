@@ -12,3 +12,13 @@ linters-settings:
         allow:
           - $gostd
           - github.com/MaUhlik-cen56998/go-index
+run:
+  tests: true
+  exclude-dirs:
+    - bin
+    - .github
+    - .vscode
+  dirs:
+    - cmd
+    - config
+    - internal

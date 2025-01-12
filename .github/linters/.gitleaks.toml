@@ -1,0 +1,8 @@
+title = "gitleaks config"
+description = "Gitleaks configuration to ignore test files"
+
+[[rules]]
+id = "ignore-test-files"
+description = "Ignore test files"
+regex = '''^.*_test\.go$'''
+tags = ["filename"]
