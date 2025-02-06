@@ -18,7 +18,6 @@ func TestS3ProviderGetVersions(t *testing.T) {
 	provider := &providers.S3Provider{
 		Client: mockS3Client,
 		Bucket: "test-bucket",
-		Logger: nil,
 	}
 
 	moduleName := "fe"

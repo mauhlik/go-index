@@ -9,7 +9,7 @@ import (
 	"github.com/aws/aws-sdk-go-v2/credentials"
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/aws/aws-sdk-go/aws"
-	"gofr.dev/pkg/gofr/logging"
+	"github.com/sirupsen/logrus"
 )
 
 type S3Client interface {
@@ -20,24 +20,29 @@ type S3Client interface {
 type S3Provider struct {
 	Client S3Client
 	Bucket string
-	Logger logging.Logger
+	logger *logrus.Logger
 }
 
-func NewS3Provider(bucket, endpoint, accessKey, secretKey, region string, logger logging.Logger) (*S3Provider, error) {
+func NewS3Provider(bucket, endpoint, accessKey, secretKey, region string, logger *logrus.Logger) (*S3Provider, error) {
+	logger.Infof("Initialized S3 client endpoint %s region %s", endpoint, region)
+
 	cfg, err := config.LoadDefaultConfig(context.TODO(),
 		config.WithRegion(region),
 		config.WithCredentialsProvider(credentials.NewStaticCredentialsProvider(accessKey, secretKey, "")),
 		config.WithBaseEndpoint(endpoint),
 	)
+
 	if err != nil {
+		logger.WithError(err).Error("Failed to load AWS config")
+
 		return nil, fmt.Errorf("failed to load AWS config: %w", err)
 	}
 
 	client := s3.NewFromConfig(cfg)
 
-	logger.Infof("Initialized S3 provider with bucket: %s, endpoint: %s", bucket, endpoint)
+	logger.Infof("Initialized S3 client endpoint %s region %s", endpoint, region)
 
-	return &S3Provider{Client: client, Bucket: bucket, Logger: logger}, nil
+	return &S3Provider{Client: client, Bucket: bucket, logger: logger}, nil
 }
 
 func (p *S3Provider) GetVersions(moduleName, artifactName string) ([]string, error) {
@@ -62,7 +67,10 @@ func (p *S3Provider) GetVersions(moduleName, artifactName string) ([]string, err
 
 	for paginator.HasMorePages() {
 		page, err := paginator.NextPage(context.TODO())
+
 		if err != nil {
+			p.logger.WithError(err).Error("Failed to list objects")
+
 			return nil, fmt.Errorf("failed to list objects: %w", err)
 		}
 
