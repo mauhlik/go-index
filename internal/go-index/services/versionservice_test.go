@@ -6,6 +6,7 @@ import (
 	"github.com/MaUhlik-cen56998/go-index/internal/go-index/mocks"
 	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/golang/mock/gomock"
+	"github.com/sirupsen/logrus"
 )
 
 func TestVersionServiceGetVersions(t *testing.T) {
@@ -15,7 +16,8 @@ func TestVersionServiceGetVersions(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	mockProvider := mocks.NewMockProvider(mockCtrl)
-	service := services.NewService(mockProvider)
+	logger := logrus.New()
+	service := services.NewService(mockProvider, logger)
 
 	moduleName := "fe"
 	artifactName := "app1"
@@ -44,7 +46,8 @@ func TestVersionServiceGetLatestVersion(t *testing.T) {
 	defer mockCtrl.Finish()
 
 	mockProvider := mocks.NewMockProvider(mockCtrl)
-	service := services.NewService(mockProvider)
+	logger := logrus.New()
+	service := services.NewService(mockProvider, logger)
 
 	moduleName := "fe"
 	artifactName := "app1"
