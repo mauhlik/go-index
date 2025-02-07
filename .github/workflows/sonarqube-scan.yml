@@ -5,7 +5,10 @@ on:
         - main
     pull_request:
         types: [opened, synchronize, reopened]
-  
+
+permissions:
+  contents: read        
+
 jobs:
     sonarqube:
         uses: mauhlik/reusable-workflows/.github/workflows/sonarqube-scan.yml@v1
