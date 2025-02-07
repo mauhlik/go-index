@@ -12,6 +12,7 @@ permissions:
 jobs:
   release:
     runs-on: ubuntu-24.04
+    environment: default
     env:
       COMPONENT_NAME: go-index
     steps:
