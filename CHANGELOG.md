@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.0.2](https://github.com/mauhlik/go-index/compare/v1.0.1...v1.0.2) (2025-02-07)
+
+
+### Bug Fixes
+
+* use gin instead of gofr ([#34](https://github.com/mauhlik/go-index/issues/34)) ([6475892](https://github.com/mauhlik/go-index/commit/64758926b66569cccc07ff71b1bfc441057303a4))
+
 ## [1.0.1](https://github.com/MaUhlik-cen56998/go-index/compare/v1.0.0...v1.0.1) (2025-01-12)
 
 
