@@ -1,6 +1,8 @@
 package main
 
 import (
+	"errors"
+	"fmt"
 	"log"
 	"os"
 	"time"
@@ -11,6 +13,11 @@ import (
 	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/gin-gonic/gin"
 	"github.com/sirupsen/logrus"
+)
+
+var (
+	ErrProviderNotFound    = errors.New("provider not found")
+	ErrUnknownProviderType = errors.New("unknown provider type")
 )
 
 func main() {
@@ -24,8 +31,12 @@ func main() {
 		log.Fatalf("Failed to load config: %v", err)
 	}
 
-	logger := logrus.New()
+	port := cfg.Port
+	if port == "" {
+		port = "8080"
+	}
 
+	logger := logrus.New()
 	logger.SetFormatter(&logrus.JSONFormatter{
 		TimestampFormat:   time.RFC3339,
 		DisableTimestamp:  false,
@@ -40,25 +51,20 @@ func main() {
 
 	router := gin.Default()
 
-	for _, repo := range cfg.Repositories {
-		providerConfig, ok := cfg.Providers[repo.Provider]
-		if !ok {
-			log.Fatalf("Provider %s not found for repository %s", repo.Provider, repo.Name)
-		}
+	registerRoutes(router, cfg, logger)
 
-		var provider providers.Provider
-		switch conf := providerConfig.(type) {
-		case config.LocalProviderConfig:
-			provider = providers.NewLocalProvider(conf.Path)
-		case config.S3ProviderConfig:
-			provider, err = providers.NewS3Provider(
-				conf.Bucket, conf.Endpoint, conf.AccessKey, conf.SecretKey, conf.Region, logger,
-			)
-			if err != nil {
-				log.Fatalf("Failed to initialize S3 provider for repository %s: %v", repo.Name, err)
-			}
-		default:
-			log.Fatalf("Unknown provider type for repository %s", repo.Name)
+	logger.Infof("Starting server on port %s", port)
+
+	if err := router.Run(":" + port); err != nil {
+		log.Fatal(err)
+	}
+}
+
+func registerRoutes(router *gin.Engine, cfg *config.Config, logger *logrus.Logger) {
+	for _, repo := range cfg.Repositories {
+		provider, err := setupProviderForRepository(cfg, repo, logger)
+		if err != nil {
+			log.Fatalf("Failed to setup provider for repository %s: %v", repo.Name, err)
 		}
 
 		versionService := services.NewService(provider, logger)
@@ -69,8 +75,33 @@ func main() {
 			group.GET("/:module/:artifact/versions/latest", versionController.GetLatestVersion)
 		}
 	}
+}
 
-	if err := router.Run(); err != nil {
-		log.Fatal(err)
+//nolint:ireturn
+func setupProviderForRepository(cfg *config.Config, repo config.RepositoryConfig,
+	logger *logrus.Logger) (providers.Provider, error) {
+	providerConfig, ok := cfg.Providers[repo.Provider]
+	if !ok {
+		return nil, fmt.Errorf("%w for repository %s: %s", ErrProviderNotFound, repo.Name, repo.Provider)
 	}
+
+	var provider providers.Provider
+
+	var err error
+
+	switch conf := providerConfig.(type) {
+	case config.LocalProviderConfig:
+		provider = providers.NewLocalProvider(conf.Path)
+	case config.S3ProviderConfig:
+		provider, err = providers.NewS3Provider(
+			conf.Bucket, conf.Endpoint, conf.AccessKey, conf.SecretKey, conf.Region, logger,
+		)
+		if err != nil {
+			return nil, fmt.Errorf("failed to initialize S3 provider for repository %s: %w", repo.Name, err)
+		}
+	default:
+		return nil, fmt.Errorf("%w for repository %s", ErrUnknownProviderType, repo.Name)
+	}
+
+	return provider, nil
 }

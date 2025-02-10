@@ -20,6 +20,7 @@ type RepositoryConfig struct {
 }
 
 type Config struct {
+	Port         string                 `json:"port" yaml:"port"`
 	Repositories []RepositoryConfig     `json:"repositories" yaml:"repositories"`
 	Providers    map[string]interface{} `json:"providers" yaml:"providers"`
 }

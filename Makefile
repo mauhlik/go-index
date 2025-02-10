@@ -61,6 +61,9 @@ dep:
 lint:
 	golangci-lint run --enable-all
 
+lint-fix:
+	golangci-lint run --enable-all --fix
+
 fmt:
 	go fmt ./...
 
