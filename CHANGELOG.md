@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.0](https://github.com/mauhlik/go-index/compare/v1.0.2...v1.1.0) (2025-02-10)
+
+
+### Features
+
+* allow user to specify port to listen on ([#40](https://github.com/mauhlik/go-index/issues/40)) ([52f6274](https://github.com/mauhlik/go-index/commit/52f6274451796dd43a4f02bd9012d5671fbf181c))
+
 ## [1.0.2](https://github.com/mauhlik/go-index/compare/v1.0.1...v1.0.2) (2025-02-07)
 
 
