@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
 	"github.com/blang/semver"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
 	"github.com/sirupsen/logrus"
 )
 

@@ -3,9 +3,9 @@ package providers_test
 import (
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/mocks"
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
 	"github.com/golang/mock/gomock"
+	"github.com/mauhlik/go-index/internal/go-index/mocks"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
 )
 
 func TestS3ProviderGetVersions(t *testing.T) {

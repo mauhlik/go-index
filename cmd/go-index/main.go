@@ -7,11 +7,11 @@ import (
 	"os"
 	"time"
 
-	"github.com/MaUhlik-cen56998/go-index/config"
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/controllers"
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/gin-gonic/gin"
+	"github.com/mauhlik/go-index/config"
+	"github.com/mauhlik/go-index/internal/go-index/controllers"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
+	"github.com/mauhlik/go-index/internal/go-index/services"
 	"github.com/sirupsen/logrus"
 )
 

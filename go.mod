@@ -1,4 +1,4 @@
-module github.com/MaUhlik-cen56998/go-index
+module github.com/mauhlik/go-index
 
 go 1.23.1
 

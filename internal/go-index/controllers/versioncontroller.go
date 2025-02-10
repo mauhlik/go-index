@@ -4,8 +4,8 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/gin-gonic/gin"
+	"github.com/mauhlik/go-index/internal/go-index/services"
 	"github.com/sirupsen/logrus"
 )
 
