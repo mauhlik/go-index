@@ -3,7 +3,7 @@ package providers_test
 import (
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
 )
 
 func TestExtractVersionFromFilename(t *testing.T) {

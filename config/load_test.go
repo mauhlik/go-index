@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/config"
+	"github.com/mauhlik/go-index/config"
 )
 
 func TestLoadConfigJSON(t *testing.T) {

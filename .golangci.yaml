@@ -11,7 +11,7 @@ linters-settings:
           - "!**/*.go"
         allow:
           - $gostd
-          - github.com/MaUhlik-cen56998/go-index
+          - github.com/mauhlik/go-index
 run:
   tests: true
   exclude-dirs:

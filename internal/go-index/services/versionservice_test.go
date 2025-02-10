@@ -3,9 +3,9 @@ package services_test
 import (
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/mocks"
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/services"
 	"github.com/golang/mock/gomock"
+	"github.com/mauhlik/go-index/internal/go-index/mocks"
+	"github.com/mauhlik/go-index/internal/go-index/services"
 	"github.com/sirupsen/logrus"
 )
 

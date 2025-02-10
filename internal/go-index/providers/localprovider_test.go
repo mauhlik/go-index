@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
 )
 
 func TestLocalProviderGetVersions(t *testing.T) {

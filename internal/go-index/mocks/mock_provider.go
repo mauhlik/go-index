@@ -1,8 +1,8 @@
 package mocks
 
 import (
-	"github.com/MaUhlik-cen56998/go-index/internal/go-index/providers"
 	"github.com/golang/mock/gomock"
+	"github.com/mauhlik/go-index/internal/go-index/providers"
 )
 
 type MockProvider struct {
