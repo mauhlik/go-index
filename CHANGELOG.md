@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.1.1](https://github.com/mauhlik/go-index/compare/v1.1.0...v1.1.1) (2025-04-25)
+
+
+### Bug Fixes
+
+* **deps:** bump the all-gomod-updates group across 1 directory with 4 updates ([#55](https://github.com/mauhlik/go-index/issues/55)) ([faf2bb7](https://github.com/mauhlik/go-index/commit/faf2bb7a9bc07d92a316ed840df3c81018d230e5))
+
 ## [1.1.0](https://github.com/mauhlik/go-index/compare/v1.0.2...v1.1.0) (2025-02-10)
 
 
