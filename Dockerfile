@@ -1,4 +1,4 @@
-FROM golang:1.24.3 AS build
+FROM golang:1.24.4 AS build
 
 WORKDIR /go/src/app
 
@@ -10,7 +10,7 @@ COPY . .
 
 RUN go build -v -o /usr/local/bin/app ./cmd/go-index
 
-FROM golang:1.24.3
+FROM golang:1.24.4
 
 RUN useradd -m app-user
 
