@@ -20,7 +20,7 @@ jobs:
             with:
               fetch-depth: 0
           - name: Super-Linter
-            uses: super-linter/super-linter@v7.4.0
+            uses: super-linter/super-linter@v8.0.0
             env:
               GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               FILTER_REGEX_EXCLUDE: CHANGELOG.md
